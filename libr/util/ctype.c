@@ -115,7 +115,10 @@ R_API int r_type_get_bitsize(Sdb *TDB, const char *type) {
 	}
 	if ((strstr (type, "*(") || strstr (type, " *")) &&
 			strncmp (type, "char *", 7)) {
-		return 32;
+		ut64 sz;
+		sz = sdb_num_get (TDB, "type.void *.size", 0);
+		// returns size in bits
+		return sz ? sz : 32;
 	}
 	const char *t = sdb_const_get (TDB, tmptype, 0);
 	if (!t) {
